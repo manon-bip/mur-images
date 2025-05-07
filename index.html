@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mur d'images</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style.css">
+  <title>Mur d'Images</title>
 </head>
 <body>
-  <input type="file" id="fileInput" accept="image/*">
+  <input type="file" id="fileInput" accept="image/*" />
+
+  <div id="auth-section">
+    <input type="email" id="email" placeholder="Email admin" />
+    <input type="password" id="password" placeholder="Mot de passe" />
+    <button id="login-btn">Se connecter</button>
+    <button id="logout-btn" style="display:none;">Se déconnecter</button>
+  </div>
+
+  <div id="admin-options" style="display:none;">
+    <button id="reset-btn">🧹 Reset le mur</button>
+  </div>
+
   <div id="canvas"></div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script src="firebase-config.js"></script>
   <script src="script.js"></script>
 </body>
