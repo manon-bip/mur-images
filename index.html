@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mur d'images</title>
   <link rel="stylesheet" href="style.css">
-  <title>Mur d'Images</title>
 </head>
+
 <body>
-  <input type="file" id="fileInput" accept="image/*" />
+  <input type="file" id="fileInput" accept="image/*"/>
 
   <div id="auth-section">
-    <input type="email" id="email" placeholder="Email admin" />
-    <input type="password" id="password" placeholder="Mot de passe" />
-    <button id="login-btn">Se connecter</button>
-    <button id="logout-btn" style="display:none;">Se déconnecter</button>
+    <input type="email" id="email" placeholder="e-mail admin" />
+    <input type="password" id="password" placeholder="mot de passe" />
+
+    <button id="logout-btn" style="display:none;">N</button>
   </div>
 
   <div id="admin-options" style="display:none;">
-    <button id="reset-btn">🧹 Reset le mur</button>
+    <button id="reset-btn">3</button>
   </div>
 
   <div id="canvas"></div>
@@ -28,5 +30,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script src="firebase-config.js"></script>
   <script src="script.js"></script>
+
 </body>
+
 </html>
