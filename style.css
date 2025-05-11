@@ -35,9 +35,6 @@ html, body{
 }
 
 #tools{
-  width: 100vw;
-  height: 100vh;
-
   bottom: 1em;
   right: 1em;
 
@@ -54,6 +51,7 @@ html, body{
 #admin-options{
   margin-bottom: 1em;
 }
+
 
 #logout-btn, #reset-btn {
   font-family: "Wingdings 2";
