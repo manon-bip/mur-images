@@ -1,6 +1,6 @@
 // ⚠️ À REMPLACER PAR TA CONFIGURATION FIREBASE
 const firebaseConfig = {
-  apiKey: "AIzaSyC84gP0sKi9BpM5pOqerJ5AmHFlP2F1zVs",
+  apiKey: "AIzaSyAJw4HHmX-J4Aoa744_oIYrX_Exv0qR6KE",
   authDomain: "mur-images-bce2f.firebaseapp.com",
   databaseURL: "https://mur-images-bce2f-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "mur-images-bce2f",
