@@ -11,15 +11,16 @@
 <body>
   <input type="file" id="fileInput" accept="image/*"/>
 
-  <div id="auth-section">
-    <input type="email" id="email" placeholder="e-mail admin" />
-    <input type="password" id="password" placeholder="mot de passe" />
+  <div id="tools">
+      <div id="admin-options" style="display:none;">
+        <button id="reset-btn">3</button>
+      </div>
 
-    <button id="logout-btn" style="display:none;">N</button>
-  </div>
-
-  <div id="admin-options" style="display:none;">
-    <button id="reset-btn">3</button>
+      <div id="auth-section">
+        <input type="email" id="email" placeholder="e-mail admin" />
+        <input type="password" id="password" placeholder="mot de passe" />
+        <button id="logout-btn" style="display:none;">N</button>
+      </div>
   </div>
 
   <div id="canvas"></div>

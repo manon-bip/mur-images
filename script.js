@@ -116,7 +116,7 @@ db.ref("images").on("value", (snapshot) => {
 
     if (currentUserIsAdmin) {
       const delBtn = document.createElement("button");
-      delBtn.textContent = "🗑️";
+      delBtn.textContent = "Suppr";
       delBtn.style.position = "absolute";
       delBtn.style.top = "0";
       delBtn.style.left = "0";
