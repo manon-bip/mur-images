@@ -86,7 +86,7 @@ input.addEventListener('change', async (e) => {
     body: formData
   });
   const data = await res.json();
-  const optimizedUrl = data.secure_url.replace('/upload/', '/upload/w_200,h_200,c_fill,q_85,f_auto/');
+  const optimizedUrl = data.secure_url.replace('/upload/', '/upload/w_200,q_85,f_auto/');
 
   const x = Math.floor(Math.random() * (window.innerWidth - 150));
   const y = Math.floor(Math.random() * (window.innerHeight - 150));
