@@ -4,13 +4,13 @@ const canvas = document.getElementById('canvas');
 const adminUID = "qxRlYIZQKhZBhjmxsMs34FWTfPK2";
 let currentUserIsAdmin = false;
 
-// --- DRAG & DROP ---
+// --- DRAG & DROP LOGIC ---
 const handleDrag = (element, key, onMoveCallback) => {
   let offsetX, offsetY;
 
   const onMove = (e) => {
-    const clientX = e.touches?.[0]?.clientX ?? e.clientX;
-    const clientY = e.touches?.[0]?.clientY ?? e.clientY;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     onMoveCallback(clientX - offsetX, clientY - offsetY);
   };
 
@@ -19,16 +19,15 @@ const handleDrag = (element, key, onMoveCallback) => {
       x: parseInt(element.style.left),
       y: parseInt(element.style.top)
     });
-    window.removeEventListener("mousemove", onMove);
-    window.removeEventListener("mouseup", onEnd);
-    window.removeEventListener("touchmove", onMove);
-    window.removeEventListener("touchend", onEnd);
+    ["mousemove", "mouseup", "touchmove", "touchend"].forEach(event =>
+      window.removeEventListener(event, onMove)
+    );
   };
 
   const startDrag = (e) => {
     e.preventDefault();
-    const startX = e.touches?.[0]?.clientX ?? e.clientX;
-    const startY = e.touches?.[0]?.clientY ?? e.clientY;
+    const startX = e.touches ? e.touches[0].clientX : e.clientX;
+    const startY = e.touches ? e.touches[0].clientY : e.clientY;
     const rect = element.getBoundingClientRect();
     offsetX = startX - rect.left;
     offsetY = startY - rect.top;
@@ -43,7 +42,7 @@ const handleDrag = (element, key, onMoveCallback) => {
   element.addEventListener("touchstart", startDrag);
 };
 
-// --- IMAGE PROCESSING ---
+// --- IMAGE UPLOAD + COMPRESSION + ANTI-DOUBLON ---
 async function getImageHash(blob) {
   const buffer = await blob.arrayBuffer();
   const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
@@ -86,7 +85,6 @@ input.addEventListener('change', async (e) => {
     method: "POST",
     body: formData
   });
-
   const data = await res.json();
   const optimizedUrl = data.secure_url.replace('/upload/', '/upload/w_200,h_200,c_fill,q_85,f_auto/');
 
@@ -96,9 +94,19 @@ input.addEventListener('change', async (e) => {
   db.ref("images").push({ url: optimizedUrl, x, y, hash });
 });
 
-// --- AUTH ---
+// --- OVERFLOW DYNAMIC CHANGE ---
+function setAdminOverflowMode(isAdmin) {
+  const value = isAdmin ? 'visible' : 'hidden';
+  document.documentElement.style.setProperty('overflow', value, 'important');
+  document.body.style.setProperty('overflow', value, 'important');
+}
+
+// --- AUTHENTIFICATION ---
 firebase.auth().onAuthStateChanged(user => {
-  currentUserIsAdmin = user?.uid === adminUID;
+  currentUserIsAdmin = user && user.uid === adminUID;
+
+  setAdminOverflowMode(currentUserIsAdmin);
+
   document.getElementById("admin-options").style.display = currentUserIsAdmin ? "block" : "none";
   document.getElementById("logout-btn").style.display = currentUserIsAdmin ? "inline-block" : "none";
 });
@@ -115,12 +123,13 @@ function handleLogin(event) {
 document.getElementById("email").addEventListener("keydown", handleLogin);
 document.getElementById("password").addEventListener("keydown", handleLogin);
 document.getElementById("logout-btn").addEventListener("click", () => firebase.auth().signOut());
+
 document.getElementById("reset-btn").addEventListener("click", () => {
   if (currentUserIsAdmin) db.ref("images").remove();
   else alert("Accès refusé.");
 });
 
-// --- IMAGE WALL RENDERING ---
+// --- RENDER DU MUR D'IMAGES ---
 db.ref("images").on("value", (snapshot) => {
   canvas.innerHTML = "";
   const images = snapshot.val();
@@ -135,13 +144,19 @@ db.ref("images").on("value", (snapshot) => {
     wrapper.style.top = img.y + "px";
     wrapper.style.touchAction = "none";
 
+    const el = document.createElement("img");
+    el.src = img.url;
+    el.loading = "lazy";
+    el.onerror = () => wrapper.remove(); // Suppression si image cassée
+    wrapper.appendChild(el);
+
     if (currentUserIsAdmin) {
       const delBtn = document.createElement("button");
       delBtn.textContent = "Suppr";
       delBtn.style.position = "absolute";
       delBtn.style.top = "0";
       delBtn.style.left = "0";
-      delBtn.style.zIndex = "10";
+      delBtn.style.zIndex = "2";
       delBtn.onclick = () => db.ref("images/" + key).remove();
       wrapper.appendChild(delBtn);
 
@@ -151,14 +166,6 @@ db.ref("images").on("value", (snapshot) => {
       });
     }
 
-    const el = document.createElement("img");
-    el.loading = "lazy";
-
-    fetch(img.url, { method: "HEAD" })
-      .then(res => res.ok ? el.src = img.url : db.ref("images/" + key).remove())
-      .catch(() => db.ref("images/" + key).remove());
-
-    wrapper.appendChild(el);
     fragment.appendChild(wrapper);
   });
 

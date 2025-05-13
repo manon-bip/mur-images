@@ -3,6 +3,10 @@
   src: url(fonts/WINGDNG2.TTF) format("truetype");
 }
 
+@font-face {
+  font-family: "Arial";
+  src: url(fonts/arial.ttf) format("truetype");
+}
 
 html, body{
   width: 100vw;
@@ -14,29 +18,56 @@ html, body{
   overflow: hidden;
 }
 
-#fileInput {
-  position: absolute;
-  z-index: 10;
-
-  top: 1em;
-  left: 1em;
-}
-
-#canvas {
+p{
   margin: 0;
   padding: 0;
 }
 
-#canvas img {
-  width: 150px; 
-  height: auto; 
-
+#top{
   position: absolute;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: row;
+
+  top: 1rem;
+  left: 1rem;
 }
 
-#tools{
-  bottom: 1em;
-  right: 1em;
+#tooltip {
+  cursor: help;
+
+  font-family: "Wingdings 2";
+  font-size: 1.25rem;
+}
+
+#tooltip span {
+  position: absolute;
+  z-index: 20;
+
+  top: 175%; 
+  right: 0; 
+
+  padding: 1rem;
+
+  visibility: hidden;
+  opacity: 0;
+
+  border: 0.01px solid black;
+
+  font-family: "Arial";
+  font-size: 0.85rem;
+}
+
+
+#tooltip:hover span {
+  visibility: visible;
+  opacity: 1;
+}
+
+#bot{
+  bottom: 1rem;
+  right: 1rem;
 
   position: absolute;
   z-index: 10;
@@ -47,12 +78,22 @@ html, body{
   align-items: flex-end;
 }
 
-
 #admin-options{
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 }
 
-
-#logout-btn, #reset-btn {
+#reset-btn, #logout-btn{
   font-family: "Wingdings 2";
+}
+
+#canvas{
+  margin: 0;
+  padding: 0;
+}
+
+#canvas img{
+  width: 150px; 
+  height: auto; 
+
+  position: absolute;
 }
