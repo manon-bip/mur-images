@@ -1,10 +1,15 @@
+// ==============================
+// 🔧 Initialisation & Variables
+// ==============================
 const db = firebase.database();
 const input = document.getElementById('fileInput');
 const canvas = document.getElementById('canvas');
 const adminUID = "qxRlYIZQKhZBhjmxsMs34FWTfPK2";
 let currentUserIsAdmin = false;
 
-// --- DRAG & DROP LOGIC ---
+// ==============================
+// 🎯 Drag & Drop des images
+// ==============================
 const handleDrag = (element, key, onMoveCallback) => {
   let offsetX, offsetY;
 
@@ -19,9 +24,10 @@ const handleDrag = (element, key, onMoveCallback) => {
       x: parseInt(element.style.left),
       y: parseInt(element.style.top)
     });
-    ["mousemove", "mouseup", "touchmove", "touchend"].forEach(event =>
-      window.removeEventListener(event, onMove)
-    );
+    window.removeEventListener("mousemove", onMove);
+    window.removeEventListener("mouseup", onEnd);
+    window.removeEventListener("touchmove", onMove);
+    window.removeEventListener("touchend", onEnd);
   };
 
   const startDrag = (e) => {
@@ -42,14 +48,9 @@ const handleDrag = (element, key, onMoveCallback) => {
   element.addEventListener("touchstart", startDrag);
 };
 
-// --- IMAGE UPLOAD + COMPRESSION + ANTI-DOUBLON ---
-async function getImageHash(blob) {
-  const buffer = await blob.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-  return Array.from(new Uint8Array(hashBuffer))
-    .map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
+// ==============================
+// 🧠 Utilitaires : compression, hash, anti-doublon
+// ==============================
 async function compressImage(file) {
   const imageBitmap = await createImageBitmap(file);
   const maxSize = 800;
@@ -63,12 +64,22 @@ async function compressImage(file) {
   return new Promise(resolve => canvasTmp.toBlob(resolve, 'image/jpeg', 0.7));
 }
 
+async function getImageHash(blob) {
+  const buffer = await blob.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 async function isDuplicate(hash) {
   const snapshot = await db.ref("images").once("value");
   const images = snapshot.val();
   return images && Object.values(images).some(img => img.hash === hash);
 }
 
+// ==============================
+// 📤 Upload d'image
+// ==============================
 input.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -85,26 +96,29 @@ input.addEventListener('change', async (e) => {
     method: "POST",
     body: formData
   });
+
   const data = await res.json();
   const optimizedUrl = data.secure_url.replace('/upload/', '/upload/w_200,q_85,f_auto/');
-
   const x = Math.floor(Math.random() * (window.innerWidth - 150));
   const y = Math.floor(Math.random() * (window.innerHeight - 150));
 
   db.ref("images").push({ url: optimizedUrl, x, y, hash });
 });
 
-// --- OVERFLOW DYNAMIC CHANGE ---
+// ==============================
+// 🧼 Overflow admin : débloque le scroll si admin
+// ==============================
 function setAdminOverflowMode(isAdmin) {
   const value = isAdmin ? 'visible' : 'hidden';
   document.documentElement.style.setProperty('overflow', value, 'important');
   document.body.style.setProperty('overflow', value, 'important');
 }
 
-// --- AUTHENTIFICATION ---
+// ==============================
+// 🔐 Authentification Firebase
+// ==============================
 firebase.auth().onAuthStateChanged(user => {
   currentUserIsAdmin = user && user.uid === adminUID;
-
   setAdminOverflowMode(currentUserIsAdmin);
 
   document.getElementById("admin-options").style.display = currentUserIsAdmin ? "block" : "none";
@@ -129,7 +143,9 @@ document.getElementById("reset-btn").addEventListener("click", () => {
   else alert("Accès refusé.");
 });
 
-// --- RENDER DU MUR D'IMAGES ---
+// ==============================
+// 🖼️ Rendu dynamique des images
+// ==============================
 db.ref("images").on("value", (snapshot) => {
   canvas.innerHTML = "";
   const images = snapshot.val();
@@ -138,35 +154,49 @@ db.ref("images").on("value", (snapshot) => {
   const fragment = document.createDocumentFragment();
 
   Object.entries(images).forEach(([key, img]) => {
-    const wrapper = document.createElement("div");
-    wrapper.style.position = "absolute";
-    wrapper.style.left = img.x + "px";
-    wrapper.style.top = img.y + "px";
-    wrapper.style.touchAction = "none";
+    // 🔍 Vérifie que l'image Cloudinary existe encore
+    fetch(img.url, { method: "HEAD" })
+      .then(response => {
+        if (!response.ok) {
+          db.ref("images/" + key).remove();
+          return;
+        }
 
-    const el = document.createElement("img");
-    el.src = img.url;
-    el.loading = "lazy";
-    el.onerror = () => wrapper.remove(); // Suppression si image cassée
-    wrapper.appendChild(el);
+        // 💡 Création de l'image
+        const wrapper = document.createElement("div");
+        wrapper.style.position = "absolute";
+        wrapper.style.left = img.x + "px";
+        wrapper.style.top = img.y + "px";
+        wrapper.style.touchAction = "none";
 
-    if (currentUserIsAdmin) {
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "Suppr";
-      delBtn.style.position = "absolute";
-      delBtn.style.top = "0";
-      delBtn.style.left = "0";
-      delBtn.style.zIndex = "2";
-      delBtn.onclick = () => db.ref("images/" + key).remove();
-      wrapper.appendChild(delBtn);
+        const el = document.createElement("img");
+        el.src = img.url;
+        el.loading = "lazy";
+        wrapper.appendChild(el);
 
-      handleDrag(wrapper, key, (x, y) => {
-        wrapper.style.left = `${x}px`;
-        wrapper.style.top = `${y}px`;
+        // 🗑️ Si admin : bouton supprimer + drag
+        if (currentUserIsAdmin) {
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "Suppr";
+          delBtn.style.position = "absolute";
+          delBtn.style.top = "0";
+          delBtn.style.left = "0";
+          delBtn.style.zIndex = "2";
+          delBtn.onclick = () => db.ref("images/" + key).remove();
+          wrapper.appendChild(delBtn);
+
+          handleDrag(wrapper, key, (x, y) => {
+            wrapper.style.left = `${x}px`;
+            wrapper.style.top = `${y}px`;
+          });
+        }
+
+        fragment.appendChild(wrapper);
+      })
+      .catch(() => {
+        // 💥 Si l'image est cassée (404, ou autre erreur réseau)
+        db.ref("images/" + key).remove();
       });
-    }
-
-    fragment.appendChild(wrapper);
   });
 
   canvas.appendChild(fragment);
