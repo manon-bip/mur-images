@@ -1,12 +1,12 @@
 // ⚠️ À REMPLACER PAR TA CONFIGURATION FIREBASE
 const firebaseConfig = {
-  apiKey: "AIzaSyC84gP0sKi9BpM5pOqerJ5AmHFlP2F1zVs",
-  authDomain: "mur-images-bce2f.firebaseapp.com",
-  databaseURL: "https://mur-images-bce2f-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "mur-images-bce2f",
-  storageBucket: "mur-images-bce2f.firebasestorage.app",
-  messagingSenderId: "115234475888",
-  appId: "1:115234475888:web:38982e4ad0632359ba89b5"
+  apiKey: "AIzaSyBO5MBHESY7QmuMAxNm2uvyUgHsctuIkUk",
+  authDomain: "mur-images-d8be7.firebaseapp.com",
+  databaseURL: "https://mur-images-d8be7-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mur-images-d8be7",
+  storageBucket: "mur-images-d8be7.firebasestorage.app",
+  messagingSenderId: "979566558656",
+  appId: "1:979566558656:web:9978ea9c62c0e1b485dc25"
 };
 
 firebase.initializeApp(firebaseConfig);

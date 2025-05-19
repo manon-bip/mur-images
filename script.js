@@ -4,7 +4,7 @@
 const db = firebase.database();
 const input = document.getElementById('fileInput');
 const canvas = document.getElementById('canvas');
-const adminUID = "qxRlYIZQKhZBhjmxsMs34FWTfPK2";
+const adminUID = "ueB79EZRrzedLgZZpVOSsj453hs1";
 let currentUserIsAdmin = false;
 
 // ------------------------------------------
