@@ -104,7 +104,7 @@ input.addEventListener('change', async (e) => {
   formData.append("file", blob);
   formData.append("upload_preset", "public-upload");
 
-  const res = await fetch("https://api.cloudinary.com/v1_1/danbblbte/image/upload", { method: "POST", body: formData });
+  const res = await fetch("https://api.cloudinary.com/v1_1/dwmbnxn5q/image/upload", { method: "POST", body: formData });
   const data = await res.json();
   const optimizedUrl = data.secure_url.replace('/upload/', '/upload/w_200,q_85,f_auto/');
 
