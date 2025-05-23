@@ -10,20 +10,13 @@
 
 <body>
   <div id="top">
-    <input type="file" id="fileInput" accept="image/*"/>
+    <label for="fileInput" id="input-btn">Choisir une image</label>
+    <input type="file" id="fileInput" accept="image/*" style="display:none;"/>
     <p id="tooltip">"
       <span>
-        En utilisant ce site, vous acceptez
-        <br>
-        de ne pas publier d’images illégales.
-        <br>
-        Vous êtes entièrement responsable
-        <br>
-        des contenus que vous partagez.
-        <br>
-        Toute image peut être supprimée
-        <br>
-        à tout moment, sans justification. 
+        En utilisant ce site, vous acceptez de ne pas publier d’images illégales.
+        Vous êtes entièrement responsable des contenus que vous partagez.
+        Toute image peut être supprimée à tout moment, sans justification. 
         <br>
         <br>
         Contact : manonbip0@gmail.com
@@ -37,8 +30,8 @@
       </div>
 
       <div id="auth-section">
-        <input type="email" id="email" placeholder="e-mail admin" />
-        <input type="password" id="password" placeholder="mot de passe" />
+        <input type="email" id="email" placeholder="@" />
+        <input type="password" id="password" placeholder="*" />
         <button id="logout-btn" style="display:none;">N</button>
       </div>
   </div>

@@ -4,26 +4,84 @@
 }
 
 @font-face {
-  font-family: "Arial";
-  src: url(fonts/arial.ttf) format("truetype");
+  font-family: "Compagnon";
+  src: url(fonts/Compagnon-Roman.otf) format("truetype");
 }
 
-html, body{
+:root {
+    --orange: #ff3323;
+    --bleu: #f3fbf8;
+    --typo: "Compagnon";
+}
+
+html {
   width: 100vw;
   height: 100vh;
 
   margin: 0;
   padding: 0;
 
-  overflow: hidden;
+  font-size: 16px;
 }
 
-p{
+/* Très petits écrans */
+@media (max-width: 480px) {
+  html {
+    font-size: 13px; 
+  }
+}
+
+/* Petits écrans */
+@media (min-width: 481px) and (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Écrans moyens */
+@media (min-width: 641px) and (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* Écrans larges */
+@media (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Grands écrans */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+/* Très grands écrans */
+@media (min-width: 1281px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+
+* {
   margin: 0;
   padding: 0;
 }
 
-#top{
+body {
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
+
+  background-color: var(--bleu);
+}
+
+#top {
   position: absolute;
   z-index: 10;
 
@@ -34,38 +92,67 @@ p{
   left: 1rem;
 }
 
-#tooltip {
-  cursor: help;
+#input-btn {
+  width: 9rem;
+  height: 1.25rem;
 
+  margin-right: 1rem;
+
+  font-size: 0.8rem;
+  font-family: var(--typo);
+  text-align: center;
+
+  border: 0.5px solid var(--orange);
+
+  color: var(--bleu);
+  background-color: var(--orange);
+}
+
+#input-btn:hover {
+  color: var(--orange);
+  background-color: transparent;
+
+  cursor: pointer;
+}
+
+#tooltip {
   font-family: "Wingdings 2";
   font-size: 1.25rem;
+
+  color: var(--orange);
+
+  cursor: help;
 }
 
 #tooltip span {
+  width: 15rem;
+  height: auto;
+
   position: absolute;
   z-index: 20;
 
-  top: 175%; 
-  right: 0; 
-
+  margin-left: 1rem;
   padding: 1rem;
 
   visibility: hidden;
   opacity: 0;
 
-  border: 0.01px solid black;
+  border: 0.5px solid var(--orange);
 
-  font-family: "Arial";
-  font-size: 0.85rem;
+  font-family: var(--typo);
+  font-size: 0.8rem;
 }
 
 
 #tooltip:hover span {
   visibility: visible;
   opacity: 1;
+
+  color: var(--orange);
+  background-color: var(--bleu);
 }
 
-#bot{
+#bot {
   bottom: 1rem;
   right: 1rem;
 
@@ -78,20 +165,75 @@ p{
   align-items: flex-end;
 }
 
-#admin-options{
-  margin-bottom: 1rem;
+#admin-options {
+  margin-bottom: 0.75rem;
 }
 
-#reset-btn, #logout-btn{
+#reset-btn, #logout-btn {
+  width: 2rem;
+  height: 1.25rem;
+
+  margin-left: 0.75rem;
+
   font-family: "Wingdings 2";
+
+  border: 0.5px solid var(--orange);
+
+  color: var(--bleu);
+  background-color: var(--orange);
 }
 
-#canvas{
+
+#reset-btn:hover {
+  color: var(--orange);
+  background-color: transparent;
+
+  cursor: pointer;
+}
+
+
+#logout-btn:hover {
+  color: var(--orange);
+  background-color: transparent;
+
+  cursor: pointer;
+}
+
+#email, #password {
+  width: 5rem;
+  height: 1.25rem;
+
+  font-family: var(--typo);
+
+  border: 0.5px solid var(--orange);
+
+  background-color: transparent;
+}
+
+#email {
+  margin-right: 0.75rem;
+}
+
+::placeholder {
+  text-align: center;
+
+  color: var(--orange);
+}
+
+input, select, textarea{
+  color: var(--orange);
+}
+
+:focus {
+    outline: none;
+}
+
+#canvas {
   margin: 0;
   padding: 0;
 }
 
-#canvas img{
+#canvas img {
   width: 150px; 
   height: auto; 
 
