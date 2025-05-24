@@ -131,7 +131,8 @@ body {
   position: absolute;
   z-index: 20;
 
-  margin-left: 1rem;
+  margin-left: -11.35rem;
+  margin-top: 2.25rem;
   padding: 1rem;
 
   visibility: hidden;
@@ -207,7 +208,7 @@ body {
 
   border: 0.5px solid var(--orange);
 
-  background-color: transparent;
+  background-color: var(--bleu);
 }
 
 #email {
