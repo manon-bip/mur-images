@@ -81,7 +81,7 @@ body {
 #top {
   width: 100vw;
 
-  position: absolute;
+  position: fixed;
   z-index: 10;
 
   display: flex;
@@ -170,7 +170,7 @@ body {
   bottom: 1rem;
   right: 1rem;
 
-  position: absolute;
+  position: fixed;
   z-index: 10;
 
   display: flex;

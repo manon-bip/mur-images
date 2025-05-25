@@ -138,24 +138,10 @@ input.addEventListener('change', async (e) => {
 // ------------------------------------------
 firebase.auth().onAuthStateChanged(user => {
   currentUserIsAdmin = user && user.uid === adminUID;
-
-  // Désactive scroll pour tout le monde sauf admin connecté
-  document.body.style.overflow = currentUserIsAdmin ? 'auto' : 'hidden';
-  document.documentElement.style.overflow = currentUserIsAdmin ? 'auto' : 'hidden';
-
-  // Assure que le formulaire est visible même si scroll désactivé
-  const authSection = document.getElementById("auth-section");
-  authSection.style.position = "fixed";
-  authSection.style.bottom = "1rem";
-  authSection.style.right = "1rem";
-  authSection.style.zIndex = "20";
-  authSection.style.backgroundColor = "var(--bleu)";
-
+  setScrollLock(currentUserIsAdmin);
   document.getElementById("admin-options").style.display = currentUserIsAdmin ? "block" : "none";
   document.getElementById("logout-btn").style.display = currentUserIsAdmin ? "inline-block" : "none";
 });
-
-
 
 document.getElementById("email").addEventListener("keydown", (e) => {
   if (e.key === "Enter") firebase.auth().signInWithEmailAndPassword(
