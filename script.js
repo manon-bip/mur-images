@@ -138,10 +138,15 @@ input.addEventListener('change', async (e) => {
 // ------------------------------------------
 firebase.auth().onAuthStateChanged(user => {
   currentUserIsAdmin = user && user.uid === adminUID;
-  setScrollLock(currentUserIsAdmin);
+  if (user) {
+    setScrollLock(!currentUserIsAdmin); // Bloquer scroll seulement si connecté & pas admin
+  } else {
+    setScrollLock(false); // Laisser scroller pour voir le formulaire
+  }
   document.getElementById("admin-options").style.display = currentUserIsAdmin ? "block" : "none";
   document.getElementById("logout-btn").style.display = currentUserIsAdmin ? "inline-block" : "none";
 });
+
 
 document.getElementById("email").addEventListener("keydown", (e) => {
   if (e.key === "Enter") firebase.auth().signInWithEmailAndPassword(
