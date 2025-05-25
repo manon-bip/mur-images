@@ -82,14 +82,30 @@ body {
 }
 
 #top {
+  width: 100vw;
+
   position: absolute;
   z-index: 10;
 
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
 
-  top: 1rem;
-  left: 1rem;
+#top-left {
+  margin-top: 1rem;
+  margin-left: 1rem;
+
+  display: flex;
+  flex-direction: row;
+}
+
+#top-right img {
+  width: auto;
+  height: 1.25rem;
+
+  margin-top: 1rem;
+  margin-right: 1rem;
 }
 
 #input-btn {
@@ -235,7 +251,7 @@ input, select, textarea{
 }
 
 #canvas img {
-  width: 150px; 
+  width: 7.5rem; 
   height: auto; 
 
   position: absolute;
