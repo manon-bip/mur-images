@@ -8,6 +8,14 @@ const adminUID = "ueB79EZRrzedLgZZpVOSsj453hs1";
 let currentUserIsAdmin = false;
 
 // ------------------------------------------
+// Utilitaire : conversion px -> rem
+// ------------------------------------------
+function pxToRem(px) {
+  const baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  return (px / baseFontSize) + 'rem';
+}
+
+// ------------------------------------------
 // Scroll Lock selon statut admin
 // ------------------------------------------
 const setScrollLock = (isAdmin) => {
@@ -39,16 +47,18 @@ const handleDrag = (element, key, onMoveCallback) => {
     onMoveCallback(clientX - offsetX, clientY - offsetY);
   };
 
-  const onEnd = () => {
+  const onEnd = (x, y) => {
     db.ref("images/" + key).update({
-      x: parseInt(element.style.left),
-      y: parseInt(element.style.top)
+      x: x,
+      y: y
     });
     window.removeEventListener("mousemove", onMove);
-    window.removeEventListener("mouseup", onEnd);
+    window.removeEventListener("mouseup", onEndWrapper);
     window.removeEventListener("touchmove", onMove);
-    window.removeEventListener("touchend", onEnd);
+    window.removeEventListener("touchend", onEndWrapper);
   };
+
+  const onEndWrapper = () => onEnd(parseInt(element.style.left), parseInt(element.style.top));
 
   const startDrag = (e) => {
     e.preventDefault();
@@ -59,9 +69,9 @@ const handleDrag = (element, key, onMoveCallback) => {
     offsetY = startY - rect.top;
 
     window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onEnd);
+    window.addEventListener("mouseup", onEndWrapper);
     window.addEventListener("touchmove", onMove);
-    window.addEventListener("touchend", onEnd);
+    window.addEventListener("touchend", onEndWrapper);
   };
 
   element.addEventListener("mousedown", startDrag);
@@ -89,7 +99,6 @@ const compressImage = async (file) => {
   return new Promise(resolve => canvasTmp.toBlob(resolve, 'image/jpeg', 0.7));
 };
 
-// Vérifie doublon en validant existence sur Cloudinary (anti-cache via ?t=)
 const isDuplicate = async (hash) => {
   const snapshot = await db.ref("images").once("value");
   const images = snapshot.val();
@@ -173,12 +182,12 @@ db.ref("images").on("value", (snapshot) => {
   Object.entries(images).forEach(([key, img]) => {
     const wrapper = document.createElement("div");
     wrapper.style.position = "absolute";
-    wrapper.style.left = img.x + "px";
-    wrapper.style.top = img.y + "px";
+    wrapper.style.left = pxToRem(img.x);
+    wrapper.style.top = pxToRem(img.y);
     wrapper.style.touchAction = "none";
 
     const el = document.createElement("img");
-    el.src = img.url + "?t=" + Date.now(); // Anti-cache Cloudinary pour détecter suppression immédiate
+    el.src = img.url + "?t=" + Date.now();
     el.loading = "lazy";
     el.onerror = () => {
       console.log("Image supprimée de Cloudinary, suppression :", img.url);
@@ -202,8 +211,9 @@ db.ref("images").on("value", (snapshot) => {
       wrapper.appendChild(delBtn);
 
       handleDrag(wrapper, key, (x, y) => {
-        wrapper.style.left = `${x}px`;
-        wrapper.style.top = `${y}px`;
+        wrapper.style.left = pxToRem(x);
+        wrapper.style.top = pxToRem(y);
+        db.ref("images/" + key).update({ x, y });
       });
     }
 
