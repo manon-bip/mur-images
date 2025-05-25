@@ -8,6 +8,26 @@ const adminUID = "ueB79EZRrzedLgZZpVOSsj453hs1";
 let currentUserIsAdmin = false;
 
 // ------------------------------------------
+// Scroll Lock selon statut admin
+// ------------------------------------------
+const setScrollLock = (isAdmin) => {
+  const html = document.documentElement;
+  const body = document.body;
+
+  if (isAdmin) {
+    html.style.overflow = 'visible';
+    body.style.overflow = 'visible';
+    body.style.position = 'static';
+    body.style.touchAction = 'auto';
+  } else {
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    body.style.position = 'fixed';
+    body.style.touchAction = 'none';
+  }
+};
+
+// ------------------------------------------
 // Gestion Drag & Drop (admin uniquement)
 // ------------------------------------------
 const handleDrag = (element, key, onMoveCallback) => {
@@ -118,8 +138,7 @@ input.addEventListener('change', async (e) => {
 // ------------------------------------------
 firebase.auth().onAuthStateChanged(user => {
   currentUserIsAdmin = user && user.uid === adminUID;
-  document.documentElement.style.setProperty('overflow', currentUserIsAdmin ? 'visible' : 'hidden', 'important');
-  document.body.style.setProperty('overflow', currentUserIsAdmin ? 'visible' : 'hidden', 'important');
+  setScrollLock(currentUserIsAdmin);
   document.getElementById("admin-options").style.display = currentUserIsAdmin ? "block" : "none";
   document.getElementById("logout-btn").style.display = currentUserIsAdmin ? "inline-block" : "none";
 });
@@ -170,17 +189,21 @@ db.ref("images").on("value", (snapshot) => {
 
     if (currentUserIsAdmin) {
       const delBtn = document.createElement("button");
-      delBtn.textContent = "Suppr";
-      delBtn.style.position = "absolute";
-      delBtn.style.top = "0";
-      delBtn.style.left = "0";
-      delBtn.style.zIndex = "2";
-      delBtn.onclick = () => db.ref("images/" + key).remove();
+      delBtn.textContent = "X";
+      delBtn.classList.add("delete-btn");
+
+      const deleteImage = () => db.ref("images/" + key).remove();
+      delBtn.addEventListener('click', deleteImage);
+      delBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        deleteImage();
+      }, { passive: false });
+
       wrapper.appendChild(delBtn);
 
       handleDrag(wrapper, key, (x, y) => {
-        wrapper.style.left = ${x}px;
-        wrapper.style.top = ${y}px;
+        wrapper.style.left = `${x}px`;
+        wrapper.style.top = `${y}px`;
       });
     }
 
