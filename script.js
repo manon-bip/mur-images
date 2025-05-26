@@ -8,14 +8,6 @@ const adminUID = "ueB79EZRrzedLgZZpVOSsj453hs1";
 let currentUserIsAdmin = false;
 
 // ------------------------------------------
-// Utilitaire : conversion px -> rem
-// ------------------------------------------
-function pxToRem(px) {
-  const baseFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-  return (px / baseFontSize) + 'rem';
-}
-
-// ------------------------------------------
 // Scroll Lock selon statut admin
 // ------------------------------------------
 const setScrollLock = (isAdmin) => {
