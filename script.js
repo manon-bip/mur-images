@@ -44,21 +44,22 @@ const handleDrag = (element, key, onMoveCallback) => {
   const onMove = (e) => {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    onMoveCallback(clientX - offsetX, clientY - offsetY);
+    const x = clientX - offsetX;
+    const y = clientY - offsetY;
+    element.style.left = `${x}px`;
+    element.style.top = `${y}px`;
   };
 
-  const onEnd = (x, y) => {
-    db.ref("images/" + key).update({
-      x: x,
-      y: y
-    });
+  const onEnd = () => {
+    const x = parseInt(element.style.left);
+    const y = parseInt(element.style.top);
+    db.ref("images/" + key).update({ x, y });
+
     window.removeEventListener("mousemove", onMove);
-    window.removeEventListener("mouseup", onEndWrapper);
+    window.removeEventListener("mouseup", onEnd);
     window.removeEventListener("touchmove", onMove);
-    window.removeEventListener("touchend", onEndWrapper);
+    window.removeEventListener("touchend", onEnd);
   };
-
-  const onEndWrapper = () => onEnd(parseInt(element.style.left), parseInt(element.style.top));
 
   const startDrag = (e) => {
     e.preventDefault();
@@ -69,9 +70,9 @@ const handleDrag = (element, key, onMoveCallback) => {
     offsetY = startY - rect.top;
 
     window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onEndWrapper);
+    window.addEventListener("mouseup", onEnd);
     window.addEventListener("touchmove", onMove);
-    window.addEventListener("touchend", onEndWrapper);
+    window.addEventListener("touchend", onEnd);
   };
 
   element.addEventListener("mousedown", startDrag);
@@ -182,8 +183,8 @@ db.ref("images").on("value", (snapshot) => {
   Object.entries(images).forEach(([key, img]) => {
     const wrapper = document.createElement("div");
     wrapper.style.position = "absolute";
-    wrapper.style.left = pxToRem(img.x);
-    wrapper.style.top = pxToRem(img.y);
+    wrapper.style.left = `${img.x}px`;
+    wrapper.style.top = `${img.y}px`;
     wrapper.style.touchAction = "none";
 
     const el = document.createElement("img");
@@ -201,20 +202,15 @@ db.ref("images").on("value", (snapshot) => {
       delBtn.textContent = "X";
       delBtn.classList.add("delete-btn");
 
-      const deleteImage = () => db.ref("images/" + key).remove();
-      delBtn.addEventListener('click', deleteImage);
+      delBtn.addEventListener('click', () => db.ref("images/" + key).remove());
       delBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        deleteImage();
+        db.ref("images/" + key).remove();
       }, { passive: false });
 
       wrapper.appendChild(delBtn);
 
-      handleDrag(wrapper, key, (x, y) => {
-        wrapper.style.left = pxToRem(x);
-        wrapper.style.top = pxToRem(y);
-        db.ref("images/" + key).update({ x, y });
-      });
+      handleDrag(wrapper, key);
     }
 
     fragment.appendChild(wrapper);
