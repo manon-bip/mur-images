@@ -257,6 +257,9 @@ input, select, textarea{
 }
 
 .delete-btn {
+  top: 0;
+  left: 0;
+  
   position: absolute;
   z-index: 2;
 
