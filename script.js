@@ -14,18 +14,12 @@ const setScrollLock = (isAdmin) => {
   const html = document.documentElement;
   const body = document.body;
 
-  if (isAdmin) {
-    html.style.overflow = 'visible';
-    body.style.overflow = 'visible';
-    body.style.position = 'static';
-    body.style.touchAction = 'auto';
-  } else {
-    html.style.overflow = 'hidden';
-    body.style.overflow = 'hidden';
-    body.style.position = 'fixed';
-    body.style.touchAction = 'none';
-  }
+  html.style.overflow = 'auto';
+  body.style.overflow = 'auto';
+  body.style.position = 'static';
+  body.style.touchAction = 'auto';
 };
+
 
 // ------------------------------------------
 // Gestion Drag & Drop (admin uniquement)
