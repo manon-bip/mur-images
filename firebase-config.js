@@ -1,4 +1,3 @@
-// ⚠️ À REMPLACER PAR TA CONFIGURATION FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyBO5MBHESY7QmuMAxNm2uvyUgHsctuIkUk",
   authDomain: "mur-images-d8be7.firebaseapp.com",
