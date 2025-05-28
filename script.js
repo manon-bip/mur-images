@@ -126,7 +126,7 @@ input.addEventListener('change', async (e) => {
 
   const x = Math.floor(Math.random() * (window.innerWidth - 150));
   const y = Math.floor(Math.random() * (window.innerHeight - 150));
-  db.ref("images").push({ url: optimizedUrl, x, y, hash });
+  db.ref("images").push({ url: optimizedUrl, x, y, hash, timestamp: Date.now() });
 });
 
 // ------------------------------------------

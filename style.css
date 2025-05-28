@@ -181,8 +181,17 @@ body {
   z-index: 10;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-end;
+  align-items: flex-end;
+}
+
+#bot-right {
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+
+  display: flex;
+  flex-direction: column;
   align-items: flex-end;
 }
 
@@ -190,8 +199,7 @@ body {
   width: 2rem;
   height: 1.25rem;
 
-  margin-bottom: 1rem;
-  margin-right: 1rem;
+  margin-top: 0.75rem;
 
   font-family: "Wingdings 2";
 
@@ -201,16 +209,7 @@ body {
   background-color: var(--orange);
 }
 
-
-#reset-btn:hover {
-  color: var(--orange);
-  background-color: transparent;
-
-  cursor: pointer;
-}
-
-
-#logout-btn:hover {
+#reset-btn:hover, #logout-btn:hover {
   color: var(--orange);
   background-color: transparent;
 
@@ -221,8 +220,7 @@ body {
   width: 5rem;
   height: 1.25rem;
 
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin-right: 0.75rem;
 
   font-family: var(--typo);
 
@@ -231,7 +229,7 @@ body {
   background-color: var(--bleu);
 }
 
-::placeholder {
+#email::placeholder, #password::placeholder {
   text-align: center;
 
   color: var(--orange);
@@ -241,7 +239,7 @@ input, select, textarea{
   color: var(--orange);
 }
 
-:focus {
+#email:focus, #password:focus {
     outline: none;
 }
 
