@@ -204,3 +204,21 @@ db.ref("images").on("value", (snapshot) => {
 
   canvas.appendChild(fragment);
 });
+
+// -------------
+// Web to Print
+// -------------
+
+document.getElementById("generate-pdf-btn").addEventListener("click", () => {
+  const pdfUrl = "pdf/edition.pdf"; // ⚠️ adapte le chemin si nécessaire
+
+  const printWindow = window.open(pdfUrl, "_blank");
+  if (printWindow) {
+    printWindow.focus();
+    printWindow.onload = () => {
+      printWindow.print();
+    };
+  } else {
+    alert("Le navigateur a bloqué la fenêtre. Autorisez les pop-ups.");
+  }
+});
