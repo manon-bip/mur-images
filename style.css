@@ -76,8 +76,6 @@ body {
   background-color: var(--bleu);
 }
 
-
-
 #top {
   width: 100vw;
 
@@ -269,6 +267,7 @@ input, select, textarea{
 
 #canvas {
   width: 100vw;
+  height: 100vh;
 
   position: absolute;
 }
