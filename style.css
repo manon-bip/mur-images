@@ -8,10 +8,17 @@
   src: url(fonts/Compagnon-Roman.otf) format("truetype");
 }
 
+@font-face {
+  font-family: "Compagnon-Light-Italic";
+  src: url(fonts/Compagnon-LightItalic.otf) format("truetype");
+}
+
+
 :root {
     --orange: #ff3323;
     --bleu: #eafdfa;
     --typo: "Compagnon";
+    --typo-light-italic: "Compagnon-Light-Italic";
 }
 
 html {
@@ -252,6 +259,7 @@ body {
 }
 
 #email::placeholder, #password::placeholder {
+  font-family: var(--typo-light-italic);
   text-align: center;
 
   color: var(--orange);
