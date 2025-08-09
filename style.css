@@ -28,8 +28,29 @@ html {
   font-size: 16px;
 }
 
+/* Très très très très petits écrans */
+@media (max-width: 144px) {
+  html {
+    font-size: 10px; 
+  }
+}
+
+/* Très très très petits écrans */
+@media (min-width: 145px) and (max-width: 240px) {
+  html {
+    font-size: 11px; 
+  }
+}
+
+/* Très très petits écrans */
+@media (min-width: 241px) and (max-width: 360px) {
+  html {
+    font-size: 12px; 
+  }
+}
+
 /* Très petits écrans */
-@media (max-width: 480px) {
+@media (min-width: 361px) and (max-width: 480px) {
   html {
     font-size: 13px; 
   }
